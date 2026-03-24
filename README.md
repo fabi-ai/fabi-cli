@@ -1,10 +1,6 @@
 # fabi-cli
 
-Public distribution repo for the Fabi CLI.
-
-This repo does not contain the CLI source code. The source stays in Fabi's
-private backend repository. Public GitHub releases here contain only installable
-artifacts built from that private source.
+CLI for Fabi.
 
 ## Install
 
@@ -14,12 +10,34 @@ curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installe
 
 This installs `fabi` into `~/.local/bin/fabi`.
 
-## Release assets
+## Usage
+
+Log in:
+
+```bash
+fabi login
+```
+
+Start a chat:
+
+```bash
+fabi chat "can you build me a dashboard"
+```
+
+Another example:
+
+```bash
+fabi chat "what data do you have access to"
+```
+
+`fabi` stores local session state in `~/.config/fabi/cli.json`.
+
+## Release Assets
 
 Expected release assets:
 
 - `installer.sh`
-- `fabi_cli-py3-none-any.whl`
+- `fabi_cli-<version>-py3-none-any.whl`
 
 `installer.sh` downloads the latest published wheel from this repo's Releases
 page and installs it into `~/.fabi/venv`.
