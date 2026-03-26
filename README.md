@@ -8,7 +8,7 @@ CLI for Fabi.
 curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash
 ```
 
-This installs `fabi` into `~/.local/bin/fabi`.
+This downloads a standalone `fabi` executable into `~/.local/bin/fabi`.
 
 ## Usage
 
@@ -37,7 +37,9 @@ fabi chat "what data do you have access to"
 Expected release assets:
 
 - `installer.sh`
-- `fabi_cli-<version>-py3-none-any.whl`
+- `fabi-linux-amd64`
+- `fabi-darwin-amd64`
+- `fabi-darwin-arm64`
 
-`installer.sh` downloads the latest published wheel from this repo's Releases
-page and installs it into `~/.fabi/venv`.
+`installer.sh` downloads the platform-specific executable from the latest
+release and installs it into `~/.local/bin/fabi`.
