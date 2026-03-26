@@ -2,51 +2,55 @@
 set -euo pipefail
 
 REPO="fabi-ai/fabi-cli"
-INSTALL_ROOT="${HOME}/.fabi"
 BIN_DIR="${HOME}/.local/bin"
-VENV_DIR="${INSTALL_ROOT}/venv"
-RELEASE_API_URL="https://api.github.com/repos/${REPO}/releases/latest"
+RELEASE_DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download"
 
-resolve_wheel_url() {
-  local release_json
-  local wheel_url
+resolve_asset_name() {
+  local os
+  local arch
 
-  release_json="$(curl -fsSL "${RELEASE_API_URL}")"
-  wheel_url="$(
-    RELEASE_JSON="${release_json}" python3 - <<'PY'
-import json
-import os
+  os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  arch="$(uname -m)"
 
-release = json.loads(os.environ["RELEASE_JSON"])
-for asset in release.get("assets", []):
-    url = asset.get("browser_download_url", "")
-    name = asset.get("name", "")
-    if name.endswith(".whl") and "py3-none-any" in name:
-        print(url)
-        break
-PY
-  )"
+  case "${os}" in
+    linux)
+      os="linux"
+      ;;
+    darwin)
+      os="darwin"
+      ;;
+    *)
+      echo "Unsupported operating system: ${os}" >&2
+      exit 1
+      ;;
+  esac
 
-  if [ -z "${wheel_url}" ]; then
-    echo "Could not find a wheel asset in the latest release." >&2
-    exit 1
-  fi
+  case "${arch}" in
+    x86_64|amd64)
+      arch="amd64"
+      ;;
+    arm64|aarch64)
+      arch="arm64"
+      ;;
+    *)
+      echo "Unsupported architecture: ${arch}" >&2
+      exit 1
+      ;;
+  esac
 
-  echo "${wheel_url}"
+  echo "fabi-${os}-${arch}"
 }
 
-mkdir -p "${INSTALL_ROOT}" "${BIN_DIR}"
+mkdir -p "${BIN_DIR}"
 
-if [ ! -d "${VENV_DIR}" ]; then
-  python3 -m venv "${VENV_DIR}"
-fi
+ASSET_NAME="$(resolve_asset_name)"
+ASSET_URL="${RELEASE_DOWNLOAD_URL}/${ASSET_NAME}"
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
-WHEEL_URL="$(resolve_wheel_url)"
-
-"${VENV_DIR}/bin/python" -m pip install --upgrade pip >/dev/null
-"${VENV_DIR}/bin/python" -m pip install --upgrade "${WHEEL_URL}"
-
-ln -sf "${VENV_DIR}/bin/fabi" "${BIN_DIR}/fabi"
+curl -fsSL "${ASSET_URL}" -o "${TMP_DIR}/fabi"
+chmod +x "${TMP_DIR}/fabi"
+mv "${TMP_DIR}/fabi" "${BIN_DIR}/fabi"
 
 cat <<EOF
 Installed fabi to ${BIN_DIR}/fabi
