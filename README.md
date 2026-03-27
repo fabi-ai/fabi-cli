@@ -38,6 +38,7 @@ Expected release assets:
 
 - `installer.sh`
 - `fabi-linux-amd64`
+- `fabi-linux-arm64`
 - `fabi-darwin-amd64`
 - `fabi-darwin-arm64`
 
