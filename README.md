@@ -37,8 +37,8 @@ then run `fabi login` to authenticate.
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
 | `fabi chat "prompt"` | Conversational data analysis |
-| `fabi build-app <uuid>` | Fetch notebook manifest for dashboard building |
-| `fabi deploy ./dist` | Deploy a built React app to Fabi |
+| `fabi build-app` | Fetch the current Smartbook manifest for dashboard building |
+| `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
 | `fabi install-skill` | Install the /fabi skill for Claude Code and Codex |
 
 ## Examples
@@ -50,10 +50,14 @@ fabi chat "Show me revenue by month"
 fabi chat -n "Start a fresh session"
 
 # Build and deploy a dashboard
-fabi build-app <notebook_uuid> -o manifest.json
+fabi build-app -o manifest.json
 # ... build your React app ...
 bun run build
 fabi deploy ./dist
+
+# Target a different Smartbook explicitly
+fabi build-app --notebook-uuid <notebook_uuid> -o manifest.json
+fabi deploy ./dist --notebook-uuid <notebook_uuid>
 ```
 
 ## Configuration
