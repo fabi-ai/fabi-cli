@@ -26,6 +26,11 @@ Install the Fabi skill: run `fabi install-skill` to register the /fabi skill,
 then run `fabi login` to authenticate.
 ```
 
+`fabi install-skill` downloads `SKILL.md` from the latest `fabi-cli` release and installs it to:
+
+- `~/.claude/skills/fabi/SKILL.md`
+- `~/.codex/skills/fabi/SKILL.md`
+
 ## Commands
 
 | Command | Description |
@@ -54,6 +59,28 @@ fabi deploy ./dist
 ## Configuration
 
 Config is stored at `~/.config/fabi/cli.json`.
+
+## Uninstall
+
+Remove the CLI binary:
+
+```bash
+rm -f /usr/local/bin/fabi
+rm -f ~/.local/bin/fabi
+```
+
+Remove local CLI config:
+
+```bash
+rm -f ~/.config/fabi/cli.json
+```
+
+Remove the installed skill files:
+
+```bash
+rm -rf ~/.claude/skills/fabi
+rm -rf ~/.codex/skills/fabi
+```
 
 ## Release Assets
 
