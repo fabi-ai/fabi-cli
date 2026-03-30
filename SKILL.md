@@ -57,15 +57,16 @@ Chat creates a Smartbook (notebook) on the Fabi platform and streams the AI resp
 ### `fabi build-app` — Build a React Dashboard
 
 ```bash
-fabi build-app <notebook_uuid>                    # Output manifest to stdout
-fabi build-app <notebook_uuid> -o manifest.json   # Save to file
+fabi build-app                                 # Output manifest to stdout
+fabi build-app -o manifest.json                # Save to file
+fabi build-app --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
 Fetches the notebook manifest — a JSON document describing available data (dataframes, tables, files) and API endpoints for querying it.
 
 #### Workflow for building a dashboard:
 
-1. Run `fabi build-app <notebook_uuid> -o manifest.json`
+1. Run `fabi build-app -o manifest.json`
 2. Read the manifest to understand available data
 3. **Verify the backend is working** — call the query API to confirm you can fetch real data
 4. **Understand the notebook semantics (MANDATORY)** — before writing any dashboard code:
@@ -109,9 +110,10 @@ If the user asks for any of these, build a React app.
 ```bash
 fabi deploy ./dist                          # Deploy built app from dist/
 fabi deploy ./dist --entry-path index.html  # Specify entry file (default: index.html)
+fabi deploy ./dist --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
-Deploys a built React app to the current Fabi Smartbook. Requires a prior `fabi chat` session. The app is bundled as a zip and uploaded.
+Deploys a built React app to the current Fabi Smartbook. By default it uses the notebook saved in CLI config from `fabi chat`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
 
 **Full workflow:** `fabi chat` (create notebook) → `fabi build-app` (get manifest) → build the React app → `bun run build` → `fabi deploy ./dist`
 
