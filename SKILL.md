@@ -92,6 +92,7 @@ Fetches the notebook manifest — a JSON document describing available data (dat
 - **Never assume semantics from names** — a name like `top_artists_df` tells you nothing about the ranking criteria. Read the source cell.
 - **Client-side SPA only** — Vite + React. No SSR, no Next.js, no server components. Prefer bun over npm if available.
 - **Credentials required** — every API call must include `withCredentials: true` (axios) or `credentials: 'include'` (fetch). **NEVER hardcode session tokens or Authorization headers in the React app.** The browser cookie handles auth automatically through the Vite proxy.
+- **Subpath-safe assets** — deployed notebook apps are hosted under `/notebook/<uuid>/deployed-app/`, not the site root. Configure the frontend build to emit relative asset URLs (for Vite, set `base: "./"`) so generated bundles use `./assets/...` instead of `/assets/...`, which will 404 after deployment.
 - **SQL for data access** — `POST /api/v2/notebooks/{uuid}/query` with `{"sql": "SELECT * FROM dataframe_name"}`. Reference artifact names as table names.
 
 #### When to build a React app vs use Fabi Chat
