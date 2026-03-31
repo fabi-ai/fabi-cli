@@ -2,6 +2,23 @@
 
 Command-line interface for [Fabi](https://fabi.ai) — chat with your data, build React dashboards, and deploy them.
 
+## AI Coding Agent Setup
+
+Use `/fabi` in Claude Code or Codex to get AI-assisted dashboard building.
+
+### Claude Code / Codex
+
+Open Claude Code or Codex and paste this. The agent does the rest.
+
+> Install fabi-cli: run `curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash` to install the CLI, then run `fabi install-skill` to register the /fabi skill, and finally run `fabi login` to authenticate.
+
+### What `install-skill` does
+
+`fabi install-skill` downloads `SKILL.md` from the latest `fabi-cli` release and installs it to:
+
+- `~/.claude/skills/fabi/SKILL.md` (Claude Code)
+- `~/.codex/skills/fabi/SKILL.md` (Codex)
+
 ## Install
 
 ```bash
@@ -14,22 +31,6 @@ curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installe
 fabi login
 fabi chat "What tables do I have?"
 ```
-
-## AI Coding Setup
-
-Use `/fabi` in Claude Code or Codex to get AI-assisted dashboard building.
-
-### Claude Code / Codex
-
-```
-Install the Fabi skill: run `fabi install-skill` to register the /fabi skill,
-then run `fabi login` to authenticate.
-```
-
-`fabi install-skill` downloads `SKILL.md` from the latest `fabi-cli` release and installs it to:
-
-- `~/.claude/skills/fabi/SKILL.md`
-- `~/.codex/skills/fabi/SKILL.md`
 
 ## Commands
 
