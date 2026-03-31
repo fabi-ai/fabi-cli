@@ -10,7 +10,7 @@ Open Claude Code or Codex and paste this. The agent does the rest.
 Install fabi-cli: run `curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash` to install the CLI, then run `fabi install-skill` to register the /fabi skill, and finally run `fabi login` to authenticate.
 ```
 
-You are good to go!
+You are good to go! The sections below are for reference only.
 
 ---
 
