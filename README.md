@@ -17,11 +17,15 @@ Install fabi-cli: run `curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/l
 - `~/.claude/skills/fabi/SKILL.md` (Claude Code)
 - `~/.codex/skills/fabi/SKILL.md` (Codex)
 
-## Install Fabi CLI
+### Install fabi-cli
 
 ```bash
 curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash
 ```
+
+You are good to go!
+
+---
 
 ## Quick Start
 
