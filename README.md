@@ -10,6 +10,10 @@ Open Claude Code or Codex and paste this. The agent does the rest.
 Install fabi-cli: run `curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash` to install the CLI, then run `fabi install-skill` to register the /fabi skill, and finally run `fabi login` to authenticate.
 ```
 
+You are good to go!
+
+---
+
 ### What `install-skill` does
 
 `fabi install-skill` downloads `SKILL.md` from the latest `fabi-cli` release and installs it to:
@@ -22,10 +26,6 @@ Install fabi-cli: run `curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/l
 ```bash
 curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installer.sh | bash
 ```
-
-You are good to go!
-
----
 
 ## Quick Start
 
