@@ -72,7 +72,7 @@ fabi deploy ./dist --notebook-uuid <notebook_uuid>
 
 Config is stored at `~/.config/fabi/cli.json`.
 
-The active Smartbook is tracked by local workspace path, not by notebook UUID. Local Smartbook files live under:
+Smartbook-local files live under:
 
 ```bash
 ~/.fabi/notebooks/<notebook_uuid>
@@ -83,6 +83,8 @@ Typical local files:
 - `manifest.json` from `fabi build-app`
 - your app source files
 - downloaded deployed app files from `fabi smartbook resume`
+
+`fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
 
 ## Uninstall
 
