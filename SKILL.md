@@ -154,5 +154,6 @@ That directory is where you should expect:
 #### Finding the notebook UUID:
 
 - From a Fabi URL: `https://app.fabi.ai/notebook/<notebook_uuid>`
+- From CLI config: `cat ~/.config/fabi/cli.json` and read the `workdir` value
 - From the local workspace path: `~/.fabi/notebooks/<notebook_uuid>`
 - Ask the user
