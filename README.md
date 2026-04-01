@@ -12,6 +12,7 @@ curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installe
 
 ```bash
 fabi login
+fabi smartbook new
 fabi chat "What tables do I have?"
 ```
 
@@ -36,21 +37,28 @@ then run `fabi login` to authenticate.
 | Command | Description |
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
-| `fabi chat "prompt"` | Conversational data analysis |
-| `fabi build-app` | Fetch the current Smartbook manifest for dashboard building |
+| `fabi smartbook list -n 10` | List recent Smartbooks |
+| `fabi smartbook new` | Create a new Smartbook and local workspace |
+| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app locally |
+| `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
+| `fabi build-app` | Write the current Smartbook manifest to the local workspace |
 | `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
 | `fabi install-skill` | Install the /fabi skill for Claude Code and Codex |
 
 ## Examples
 
 ```bash
+# Create or resume a Smartbook first
+fabi smartbook new
+fabi smartbook list
+fabi smartbook resume --notebook-uuid <notebook_uuid>
+
 # Data analysis
 fabi chat "What tables do I have?"
 fabi chat "Show me revenue by month"
-fabi chat -n "Start a fresh session"
 
 # Build and deploy a dashboard
-fabi build-app -o manifest.json
+fabi build-app
 # ... build your React app ...
 bun run build
 fabi deploy ./dist
@@ -63,6 +71,18 @@ fabi deploy ./dist --notebook-uuid <notebook_uuid>
 ## Configuration
 
 Config is stored at `~/.config/fabi/cli.json`.
+
+The active Smartbook is tracked by local workspace path, not by notebook UUID. Local Smartbook files live under:
+
+```bash
+~/.fabi/notebooks/<notebook_uuid>
+```
+
+Typical local files:
+
+- `manifest.json` from `fabi build-app`
+- your app source files
+- downloaded deployed app files from `fabi smartbook resume`
 
 ## Uninstall
 
@@ -77,6 +97,7 @@ Remove local CLI config:
 
 ```bash
 rm -f ~/.config/fabi/cli.json
+rm -rf ~/.fabi/notebooks
 ```
 
 Remove the installed skill files:
