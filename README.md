@@ -38,6 +38,7 @@ then run `fabi login` to authenticate.
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
 | `fabi smartbook list -n 10` | List recent Smartbooks |
+| `fabi smartbook current` | Show the current Smartbook and local workspace |
 | `fabi smartbook new` | Create a new Smartbook and local workspace |
 | `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app locally |
 | `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
@@ -51,6 +52,7 @@ then run `fabi login` to authenticate.
 # Create or resume a Smartbook first
 fabi smartbook new
 fabi smartbook list
+fabi smartbook current
 fabi smartbook resume --notebook-uuid <notebook_uuid>
 
 # Data analysis

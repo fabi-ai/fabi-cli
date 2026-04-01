@@ -127,6 +127,7 @@ Deploys a built React app to the current Fabi Smartbook. By default it uses the 
 
 ```bash
 fabi smartbook list -n 10
+fabi smartbook current
 fabi smartbook new
 fabi smartbook resume --notebook-uuid <notebook_uuid>
 ```
@@ -136,6 +137,7 @@ This is the entrypoint for Smartbook-scoped work.
 - `fabi smartbook new` creates a new Smartbook and selects `~/.fabi/notebooks/<notebook_uuid>`
 - `fabi smartbook resume` switches to an existing Smartbook and downloads its deployed app into that same local workspace, overwriting existing files there
 - `fabi smartbook list` shows recent Smartbooks and marks the current one
+- `fabi smartbook current` prints the currently selected Smartbook URL and local workspace path
 
 ### Local workspace model
 
