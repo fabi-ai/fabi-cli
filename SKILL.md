@@ -151,6 +151,8 @@ That directory is where you should expect:
 - your local app source or build output
 - deployed app files downloaded by `fabi smartbook resume`
 
+Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
+
 #### Finding the notebook UUID:
 
 - From a Fabi URL: `https://app.fabi.ai/notebook/<notebook_uuid>`

@@ -86,6 +86,8 @@ Typical local files:
 
 `fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
 
+Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
+
 ## Uninstall
 
 Remove the CLI binary:
