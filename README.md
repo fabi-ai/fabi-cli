@@ -31,6 +31,7 @@ curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installe
 
 ```bash
 fabi login
+fabi smartbook new
 fabi chat "What tables do I have?"
 ```
 
@@ -39,22 +40,31 @@ fabi chat "What tables do I have?"
 | Command | Description |
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
-| `fabi chat "prompt"` | Conversational data analysis |
-| `fabi build-app` | Fetch the current Smartbook manifest for dashboard building |
+| `fabi smartbook list -n 10` | List recent Smartbooks |
+| `fabi smartbook current` | Show the current Smartbook and local workspace |
+| `fabi smartbook new` | Create a new Smartbook and local workspace |
+| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app into `dist/` locally |
+| `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
+| `fabi build-app` | Write the current Smartbook manifest to the local workspace |
 | `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
 | `fabi install-skill` | Install the /fabi skill for Claude Code and Codex |
 
 ## Examples
 
 ```bash
+# Create or resume a Smartbook first
+fabi smartbook new
+fabi smartbook list
+fabi smartbook current
+fabi smartbook resume --notebook-uuid <notebook_uuid>
+
 # Data analysis
 fabi chat "What tables do I have?"
 fabi chat "Show me revenue by month"
-fabi chat -n "Start a fresh session"
 
 # Build and deploy a dashboard
-fabi build-app -o manifest.json
-# ... build your React app ...
+fabi build-app
+# ... create your app files directly under ~/.fabi/notebooks/<notebook_uuid>/ ...
 bun run build
 fabi deploy ./dist
 
@@ -65,7 +75,28 @@ fabi deploy ./dist --notebook-uuid <notebook_uuid>
 
 ## Configuration
 
-Config is stored at `~/.config/fabi/cli.json`.
+Config is stored at `~/.fabi/cli.json`.
+
+Smartbook-local files live under:
+
+```bash
+~/.fabi/notebooks/<notebook_uuid>
+```
+
+Typical local files:
+
+- `manifest.json` from `fabi build-app`
+- your app source files directly in that Smartbook directory
+- downloaded deployed app files in `dist/` from `fabi smartbook resume`
+
+`fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
+
+Recommended convention:
+
+- keep your app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
+- keep build output like `dist/` there too
+
+Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
 
 ## Uninstall
 
@@ -79,7 +110,8 @@ rm -f ~/.local/bin/fabi
 Remove local CLI config:
 
 ```bash
-rm -f ~/.config/fabi/cli.json
+rm -f ~/.fabi/cli.json
+rm -rf ~/.fabi/notebooks
 ```
 
 Remove the installed skill files:

@@ -2,10 +2,11 @@
 name: fabi
 version: 1.0.0
 description: |
-  Use the Fabi CLI to interact with the Fabi platform. Four commands:
-  `fabi login` for authentication, `fabi chat` for conversational data analysis,
-  `fabi build-app` for building React dashboards from notebook data, and
-  `fabi deploy` for deploying built apps to Fabi.
+  Use the Fabi CLI to interact with the Fabi platform. Core workflow:
+  `fabi login`, `fabi smartbook new` or `fabi smartbook resume`, `fabi chat`
+  for conversational data analysis, `fabi build-app` for building React
+  dashboards from notebook data, and `fabi deploy` for deploying built apps
+  to Fabi.
   Use when asked to "fabi login", "fabi chat", "build a dashboard",
   "build a react app from fabi", "fabi build-app", "deploy", or
   "create a dashboard from this notebook".
@@ -44,21 +45,25 @@ Opens a browser for OAuth login. Once complete, the session token is saved local
 ### `fabi chat` — Conversational Data Analysis
 
 ```bash
+fabi smartbook new                         # Create a Smartbook first
+fabi smartbook resume --notebook-uuid ... # Or resume an existing one
 fabi chat "What tables do I have?"       # Send a prompt
 fabi chat "Show me revenue by month"     # Ask about data
-fabi chat -n "Start fresh analysis"      # Start a new chat session
 fabi chat --timeout 300 "Run this query" # Custom timeout (seconds)
 ```
 
-Chat creates a Smartbook (notebook) on the Fabi platform and streams the AI response. Use `-n` / `--new` to start a fresh session.
+Chat uses the currently selected Smartbook and streams the AI response. It does not create Smartbooks implicitly anymore. If no Smartbook is active, run:
+
+- `fabi smartbook new`
+- `fabi smartbook resume --notebook-uuid <uuid>`
 
 **CRITICAL: Pass user prompts verbatim.** When relaying a user's request to `fabi chat`, pass their exact words. Do NOT add assumptions, reinterpret, or "improve" the prompt. The Fabi backend has its own context (connected data sources, notebook history) that gives meaning to ambiguous terms. Adding your own interpretation will contradict the actual definitions in the notebook. Let Fabi interpret the user's intent.
 
 ### `fabi build-app` — Build a React Dashboard
 
 ```bash
-fabi build-app                                 # Output manifest to stdout
-fabi build-app -o manifest.json                # Save to file
+fabi build-app                                 # Write manifest to ~/.fabi/notebooks/<uuid>/manifest.json
+fabi build-app -o manifest.json                # Save to a custom file
 fabi build-app --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
@@ -66,7 +71,7 @@ Fetches the notebook manifest — a JSON document describing available data (dat
 
 #### Workflow for building a dashboard:
 
-1. Run `fabi build-app -o manifest.json`
+1. Run `fabi build-app`
 2. Read the manifest to understand available data
 3. **Verify the backend is working** — call the query API to confirm you can fetch real data
 4. **Understand the notebook semantics (MANDATORY)** — before writing any dashboard code:
@@ -75,6 +80,11 @@ Fetches the notebook manifest — a JSON document describing available data (dat
    c. Map out which dashboard sections can use existing dataframes vs need raw SQL
    d. **Never assume what a dataframe contains from its name alone.** Always read the source cell.
 5. Build a Vite + React + TypeScript SPA dashboard
+
+Use the Smartbook workspace as the app project directory:
+
+- put app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
+- keep `dist/` there too when you build
 
 #### Pre-build checklist (must complete before writing App.tsx):
 
@@ -114,12 +124,46 @@ fabi deploy ./dist --entry-path index.html  # Specify entry file (default: index
 fabi deploy ./dist --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
-Deploys a built React app to the current Fabi Smartbook. By default it uses the notebook saved in CLI config from `fabi chat`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
+Deploys a built React app to the current Fabi Smartbook. By default it uses the currently selected Smartbook workspace under `~/.fabi/notebooks/<notebook_uuid>`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
 
-**Full workflow:** `fabi chat` (create notebook) → `fabi build-app` (get manifest) → build the React app → `bun run build` → `fabi deploy ./dist`
+**Full workflow:** `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi build-app` → build the React app → `bun run build` → `fabi deploy ./dist`
+
+### `fabi smartbook` — Select a Smartbook and local workspace
+
+```bash
+fabi smartbook list -n 10
+fabi smartbook current
+fabi smartbook new
+fabi smartbook resume --notebook-uuid <notebook_uuid>
+```
+
+This is the entrypoint for Smartbook-scoped work.
+
+- `fabi smartbook new` creates a new Smartbook and selects `~/.fabi/notebooks/<notebook_uuid>`
+- `fabi smartbook resume` switches to an existing Smartbook and downloads its deployed app into `dist/` inside that local workspace, overwriting existing files there
+- `fabi smartbook list` shows recent Smartbooks and marks the current one
+- `fabi smartbook current` prints the currently selected Smartbook URL and local workspace path
+
+### Local workspace model
+
+Fabi CLI keeps Smartbook-local files under:
+
+```bash
+~/.fabi/notebooks/<notebook_uuid>
+```
+
+That directory is where you should expect:
+
+- `manifest.json` written by `fabi build-app`
+- your local app source files directly in that Smartbook directory
+- your build output such as `dist/`
+- deployed app files downloaded by `fabi smartbook resume` into `dist/`
+
+Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
 
 #### Finding the notebook UUID:
 
 - From a Fabi URL: `https://app.fabi.ai/notebook/<notebook_uuid>`
-- From CLI config: `cat ~/.config/fabi/cli.json` (the `notebook_uuid` field)
+- From CLI config: `cat ~/.fabi/cli.json` and read the `workdir` value
+- From the local workspace path: `~/.fabi/notebooks/<notebook_uuid>`
 - Ask the user
