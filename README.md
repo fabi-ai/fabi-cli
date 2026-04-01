@@ -39,6 +39,7 @@ fabi chat "What tables do I have?"
 | Command | Description |
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
+| `fabi context` | Download data source semantics and instructions as Markdown |
 | `fabi chat "prompt"` | Conversational data analysis |
 | `fabi build-app` | Fetch the current Smartbook manifest for dashboard building |
 | `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
@@ -47,19 +48,22 @@ fabi chat "What tables do I have?"
 ## Examples
 
 ```bash
+# Understand your data first
+fabi context -o fabi-context.md
+
 # Data analysis
 fabi chat "What tables do I have?"
 fabi chat "Show me revenue by month"
 fabi chat -n "Start a fresh session"
 
 # Build and deploy a dashboard
-fabi build-app -o manifest.json
+fabi build-app -o manifest.md
 # ... build your React app ...
 bun run build
 fabi deploy ./dist
 
 # Target a different Smartbook explicitly
-fabi build-app --notebook-uuid <notebook_uuid> -o manifest.json
+fabi build-app --notebook-uuid <notebook_uuid> -o manifest.md
 fabi deploy ./dist --notebook-uuid <notebook_uuid>
 ```
 
