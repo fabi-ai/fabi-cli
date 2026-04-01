@@ -61,7 +61,7 @@ fabi chat "Show me revenue by month"
 
 # Build and deploy a dashboard
 fabi build-app
-# ... build your React app ...
+# ... create your app files directly under ~/.fabi/notebooks/<notebook_uuid>/ ...
 bun run build
 fabi deploy ./dist
 
@@ -83,10 +83,15 @@ Smartbook-local files live under:
 Typical local files:
 
 - `manifest.json` from `fabi build-app`
-- your app source files
+- your app source files directly in that Smartbook directory
 - downloaded deployed app files from `fabi smartbook resume`
 
 `fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
+
+Recommended convention:
+
+- keep your app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
+- keep build output like `dist/` there too
 
 Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
 

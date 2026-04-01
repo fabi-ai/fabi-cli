@@ -81,6 +81,11 @@ Fetches the notebook manifest — a JSON document describing available data (dat
    d. **Never assume what a dataframe contains from its name alone.** Always read the source cell.
 5. Build a Vite + React + TypeScript SPA dashboard
 
+Use the Smartbook workspace as the app project directory:
+
+- put app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
+- keep `dist/` there too when you build
+
 #### Pre-build checklist (must complete before writing App.tsx):
 
 - [ ] Listed all dataframes with their schemas and source cell code
@@ -150,7 +155,8 @@ Fabi CLI keeps Smartbook-local files under:
 That directory is where you should expect:
 
 - `manifest.json` written by `fabi build-app`
-- your local app source or build output
+- your local app source files directly in that Smartbook directory
+- your build output such as `dist/`
 - deployed app files downloaded by `fabi smartbook resume`
 
 Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
