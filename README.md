@@ -70,7 +70,7 @@ fabi deploy ./dist --notebook-uuid <notebook_uuid>
 
 ## Configuration
 
-Config is stored at `~/.config/fabi/cli.json`.
+Config is stored at `~/.fabi/cli.json`.
 
 Smartbook-local files live under:
 
@@ -100,7 +100,7 @@ rm -f ~/.local/bin/fabi
 Remove local CLI config:
 
 ```bash
-rm -f ~/.config/fabi/cli.json
+rm -f ~/.fabi/cli.json
 rm -rf ~/.fabi/notebooks
 ```
 

@@ -156,6 +156,6 @@ Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off over
 #### Finding the notebook UUID:
 
 - From a Fabi URL: `https://app.fabi.ai/notebook/<notebook_uuid>`
-- From CLI config: `cat ~/.config/fabi/cli.json` and read the `workdir` value
+- From CLI config: `cat ~/.fabi/cli.json` and read the `workdir` value
 - From the local workspace path: `~/.fabi/notebooks/<notebook_uuid>`
 - Ask the user
