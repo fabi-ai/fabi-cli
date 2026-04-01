@@ -140,7 +140,7 @@ fabi smartbook resume --notebook-uuid <notebook_uuid>
 This is the entrypoint for Smartbook-scoped work.
 
 - `fabi smartbook new` creates a new Smartbook and selects `~/.fabi/notebooks/<notebook_uuid>`
-- `fabi smartbook resume` switches to an existing Smartbook and downloads its deployed app into that same local workspace, overwriting existing files there
+- `fabi smartbook resume` switches to an existing Smartbook and downloads its deployed app into `dist/` inside that local workspace, overwriting existing files there
 - `fabi smartbook list` shows recent Smartbooks and marks the current one
 - `fabi smartbook current` prints the currently selected Smartbook URL and local workspace path
 
@@ -157,7 +157,7 @@ That directory is where you should expect:
 - `manifest.json` written by `fabi build-app`
 - your local app source files directly in that Smartbook directory
 - your build output such as `dist/`
-- deployed app files downloaded by `fabi smartbook resume`
+- deployed app files downloaded by `fabi smartbook resume` into `dist/`
 
 Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
 

@@ -40,7 +40,7 @@ then run `fabi login` to authenticate.
 | `fabi smartbook list -n 10` | List recent Smartbooks |
 | `fabi smartbook current` | Show the current Smartbook and local workspace |
 | `fabi smartbook new` | Create a new Smartbook and local workspace |
-| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app locally |
+| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app into `dist/` locally |
 | `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
 | `fabi build-app` | Write the current Smartbook manifest to the local workspace |
 | `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
@@ -84,7 +84,7 @@ Typical local files:
 
 - `manifest.json` from `fabi build-app`
 - your app source files directly in that Smartbook directory
-- downloaded deployed app files from `fabi smartbook resume`
+- downloaded deployed app files in `dist/` from `fabi smartbook resume`
 
 `fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
 
