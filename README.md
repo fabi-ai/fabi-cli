@@ -42,6 +42,7 @@ fabi chat "What tables do I have?"
 | `fabi login` | Authenticate with Fabi (opens browser) |
 | `fabi context` | Download data source semantics and instructions as Markdown |
 | `fabi api GET /api/v2/...` | Proxy a Fabi API request with the current CLI session |
+| `fabi logout` | Log out of Fabi |
 | `fabi smartbook list -n 10` | List recent Smartbooks |
 | `fabi smartbook current` | Show the current Smartbook and local workspace |
 | `fabi smartbook new` | Create a new Smartbook and local workspace |
@@ -70,6 +71,9 @@ fabi chat "Show me revenue by month"
 # Call Fabi backend APIs without managing auth headers manually
 fabi api GET /api/v2/notebooks/<notebook_uuid>
 fabi api POST /api/v2/notebooks/<notebook_uuid>/query --data '{"sql":"SELECT * FROM dataframe_name"}'
+
+# Log out
+fabi logout
 
 # Build and deploy a dashboard
 fabi build-app
