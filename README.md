@@ -40,6 +40,7 @@ fabi chat "What tables do I have?"
 | Command | Description |
 |---------|-------------|
 | `fabi login` | Authenticate with Fabi (opens browser) |
+| `fabi context` | Download data source semantics and instructions as Markdown |
 | `fabi smartbook list -n 10` | List recent Smartbooks |
 | `fabi smartbook current` | Show the current Smartbook and local workspace |
 | `fabi smartbook new` | Create a new Smartbook and local workspace |
@@ -52,6 +53,9 @@ fabi chat "What tables do I have?"
 ## Examples
 
 ```bash
+# Understand your data first
+fabi context -o fabi-context.md
+
 # Create or resume a Smartbook first
 fabi smartbook new
 fabi smartbook list

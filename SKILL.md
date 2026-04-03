@@ -3,11 +3,12 @@ name: fabi
 version: 1.0.0
 description: |
   Use the Fabi CLI to interact with the Fabi platform. Core workflow:
-  `fabi login`, `fabi smartbook new` or `fabi smartbook resume`, `fabi chat`
+  `fabi login`, `fabi context` for downloading data semantics,
+  `fabi smartbook new` or `fabi smartbook resume`, `fabi chat`
   for conversational data analysis, `fabi build-app` for building React
   dashboards from notebook data, and `fabi deploy` for deploying built apps
   to Fabi.
-  Use when asked to "fabi login", "fabi chat", "build a dashboard",
+  Use when asked to "fabi login", "fabi context", "fabi chat", "build a dashboard",
   "build a react app from fabi", "fabi build-app", "deploy", or
   "create a dashboard from this notebook".
 allowed-tools:
@@ -42,6 +43,19 @@ fabi login
 
 Opens a browser for OAuth login. Once complete, the session token is saved locally. All subsequent commands use this session automatically.
 
+### `fabi context` — Download Data Context (MANDATORY FIRST STEP)
+
+```bash
+fabi context                    # Write fabi-context.md to current directory
+fabi context -o /tmp/ctx.md     # Custom output path
+```
+
+**CRITICAL: Always run `fabi context` before any `fabi chat` or `fabi build-app` command.** This downloads data source semantics and custom instructions as a Markdown file. Read it to understand what the data means — column definitions, how metrics like "top" or "best" are defined, and what business logic is encoded in the data.
+
+Without this context, you will make wrong assumptions. For example, "top albums" might be ranked by streams, not sales. The semantics file tells you.
+
+After running, read the output file with the Read tool (no bash/python needed).
+
 ### `fabi chat` — Conversational Data Analysis
 
 ```bash
@@ -59,6 +73,8 @@ Chat uses the currently selected Smartbook and streams the AI response. It does 
 
 **CRITICAL: Pass user prompts verbatim.** When relaying a user's request to `fabi chat`, pass their exact words. Do NOT add assumptions, reinterpret, or "improve" the prompt. The Fabi backend has its own context (connected data sources, notebook history) that gives meaning to ambiguous terms. Adding your own interpretation will contradict the actual definitions in the notebook. Let Fabi interpret the user's intent.
 
+**CRITICAL: Read `fabi context` output first.** Before sending any chat prompt, read the context file to understand data semantics. This prevents you from adding wrong assumptions like "by sales" or "by revenue" when the data defines rankings differently.
+
 ### `fabi build-app` — Build a React Dashboard
 
 ```bash
@@ -67,12 +83,12 @@ fabi build-app -o manifest.json                # Save to a custom file
 fabi build-app --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
-Fetches the notebook manifest — a JSON document describing available data (dataframes, tables, files) and API endpoints for querying it.
+Fetches the notebook manifest as a Markdown document describing available data (dataframes, tables, files, data source semantics), agent memory, and API endpoints. Read the output with the Read tool — no JSON parsing needed.
 
 #### Workflow for building a dashboard:
 
-1. Run `fabi build-app`
-2. Read the manifest to understand available data
+1. Run `fabi context` and read the output to understand data semantics (if not already done)
+2. Run `fabi build-app` and read the manifest to understand available data, agent memory, and API endpoints
 3. **Verify the backend is working** — call the query API to confirm you can fetch real data
 4. **Understand the notebook semantics (MANDATORY)** — before writing any dashboard code:
    a. Fetch the full notebook to read the source SQL/Python for every dataframe
@@ -126,7 +142,7 @@ fabi deploy ./dist --notebook-uuid <notebook_uuid> # Override the current Smartb
 
 Deploys a built React app to the current Fabi Smartbook. By default it uses the currently selected Smartbook workspace under `~/.fabi/notebooks/<notebook_uuid>`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
 
-**Full workflow:** `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi build-app` → build the React app → `bun run build` → `fabi deploy ./dist`
+**Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi build-app` → build the React app → `bun run build` → `fabi deploy ./dist`
 
 ### `fabi smartbook` — Select a Smartbook and local workspace
 
