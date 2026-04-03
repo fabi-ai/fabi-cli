@@ -75,6 +75,15 @@ Chat uses the currently selected Smartbook and streams the AI response. It does 
 
 **CRITICAL: Read `fabi context` output first.** Before sending any chat prompt, read the context file to understand data semantics. This prevents you from adding wrong assumptions like "by sales" or "by revenue" when the data defines rankings differently.
 
+### `fabi api` — Proxy authenticated Fabi API calls
+
+```bash
+fabi api GET /api/v2/notebooks/<notebook_uuid>
+fabi api POST /api/v2/notebooks/<notebook_uuid>/query --data '{"sql":"SELECT * FROM dataframe_name"}'
+```
+
+Use this when you need to call Fabi backend APIs directly from the terminal. The CLI injects the proper authorization header automatically.
+
 ### `fabi build-app` — Build a React Dashboard
 
 ```bash
@@ -89,7 +98,7 @@ Fetches the notebook manifest as a Markdown document describing available data (
 
 1. Run `fabi context` and read the output to understand data semantics (if not already done)
 2. Run `fabi build-app` and read the manifest to understand available data, agent memory, and API endpoints
-3. **Verify the backend is working** — call the query API to confirm you can fetch real data
+3. **Verify the backend is working** — use `fabi api` to call the query API and confirm you can fetch real data
 4. **Understand the notebook semantics (MANDATORY)** — before writing any dashboard code:
    a. Fetch the full notebook to read the source SQL/Python for every dataframe
    b. Query each dataframe to see the actual data and column names
