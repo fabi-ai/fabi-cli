@@ -1,6 +1,6 @@
 # Fabi CLI
 
-Command-line interface for [Fabi](https://fabi.ai) — chat with your data, build React dashboards, and deploy them.
+Command-line interface for [Fabi](https://fabi.ai) — chat with your data, build React dashboards, preview them, and publish them.
 
 ## Install fabi-cli + skill in Claude Code or Codex
 
@@ -48,8 +48,9 @@ fabi chat "What tables do I have?"
 | `fabi smartbook new` | Create a new Smartbook and local workspace |
 | `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app into `dist/` locally |
 | `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
-| `fabi build-app` | Write the current Smartbook manifest to the local workspace |
-| `fabi deploy ./dist` | Deploy a built local app to the current Smartbook |
+| `fabi app build` | Write the current Smartbook app manifest to the local workspace |
+| `fabi app preview ./dist` | Upload a built local app as the current Smartbook preview |
+| `fabi app publish` | Publish the current app preview as a report |
 | `fabi install-skill` | Install the /fabi skill for Claude Code and Codex |
 
 ## Examples
@@ -75,15 +76,18 @@ fabi api POST /api/v2/notebooks/<notebook_uuid>/query --data '{"sql":"SELECT * F
 # Log out
 fabi logout
 
-# Build and deploy a dashboard
-fabi build-app
+# Build and preview a dashboard
+fabi app build
 # ... create your app files directly under ~/.fabi/notebooks/<notebook_uuid>/ ...
 bun run build
-fabi deploy ./dist
+fabi app preview ./dist
+
+# Publish the current app preview as a report
+fabi app publish
 
 # Target a different Smartbook explicitly
-fabi build-app --notebook-uuid <notebook_uuid> -o manifest.json
-fabi deploy ./dist --notebook-uuid <notebook_uuid>
+fabi app build --notebook-uuid <notebook_uuid> -o manifest.json
+fabi app preview ./dist --notebook-uuid <notebook_uuid>
 ```
 
 ## Configuration
@@ -100,18 +104,18 @@ Smartbook-local files live under:
 
 Typical local files:
 
-- `manifest.json` from `fabi build-app`
+- `manifest.md` from `fabi app build`
 - your app source files directly in that Smartbook directory
 - downloaded deployed app files in `dist/` from `fabi smartbook resume`
 
-`fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi build-app` and `fabi deploy` use that workspace by default.
+`fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi app build`, `fabi app preview`, and `fabi app publish` use that workspace by default.
 
 Recommended convention:
 
 - keep your app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
 - keep build output like `dist/` there too
 
-Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
+Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook workspace.
 
 ## Uninstall
 

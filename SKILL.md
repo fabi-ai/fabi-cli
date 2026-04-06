@@ -5,11 +5,11 @@ description: |
   Use the Fabi CLI to interact with the Fabi platform. Core workflow:
   `fabi login`, `fabi context` for downloading data semantics,
   `fabi smartbook new` or `fabi smartbook resume`, `fabi chat`
-  for conversational data analysis, `fabi build-app` for building React
-  dashboards from notebook data, and `fabi deploy` for deploying built apps
-  to Fabi.
+  for conversational data analysis, `fabi app build` for building React
+  dashboards from notebook data, `fabi app preview` for previewing built apps
+  from a Smartbook, and `fabi app publish` for publishing them to reports.
   Use when asked to "fabi login", "fabi context", "fabi chat", "build a dashboard",
-  "build a react app from fabi", "fabi build-app", "deploy", or
+  "build a react app from fabi", "fabi app build", "fabi app preview", "deploy", or
   "create a dashboard from this notebook".
 allowed-tools:
   - Bash
@@ -50,7 +50,7 @@ fabi context                    # Write fabi-context.md to current directory
 fabi context -o /tmp/ctx.md     # Custom output path
 ```
 
-**CRITICAL: Always run `fabi context` before any `fabi chat` or `fabi build-app` command.** This downloads data source semantics and custom instructions as a Markdown file. Read it to understand what the data means — column definitions, how metrics like "top" or "best" are defined, and what business logic is encoded in the data.
+**CRITICAL: Always run `fabi context` before any `fabi chat` or `fabi app build` command.** This downloads data source semantics and custom instructions as a Markdown file. Read it to understand what the data means — column definitions, how metrics like "top" or "best" are defined, and what business logic is encoded in the data.
 
 Without this context, you will make wrong assumptions. For example, "top albums" might be ranked by streams, not sales. The semantics file tells you.
 
@@ -84,12 +84,12 @@ fabi api POST /api/v2/notebooks/<notebook_uuid>/query --data '{"sql":"SELECT * F
 
 Use this when you need to call Fabi backend APIs directly from the terminal. The CLI injects the proper authorization header automatically.
 
-### `fabi build-app` — Build a React Dashboard
+### `fabi app build` — Build a React Dashboard
 
 ```bash
-fabi build-app                                 # Write manifest to ~/.fabi/notebooks/<uuid>/manifest.json
-fabi build-app -o manifest.json                # Save to a custom file
-fabi build-app --notebook-uuid <notebook_uuid> # Override the current Smartbook
+fabi app build                                 # Write manifest to ~/.fabi/notebooks/<uuid>/manifest.md
+fabi app build -o manifest.json                # Save to a custom file
+fabi app build --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
 Fetches the notebook manifest as a Markdown document describing available data (dataframes, tables, files, data source semantics), agent memory, and API endpoints. Read the output with the Read tool — no JSON parsing needed.
@@ -97,7 +97,7 @@ Fetches the notebook manifest as a Markdown document describing available data (
 #### Workflow for building a dashboard:
 
 1. Run `fabi context` and read the output to understand data semantics (if not already done)
-2. Run `fabi build-app` and read the manifest to understand available data, agent memory, and API endpoints
+2. Run `fabi app build` and read the manifest to understand available data, agent memory, and API endpoints
 3. **Verify the backend is working** — use `fabi api` to call the query API and confirm you can fetch real data
 4. **Understand the notebook semantics (MANDATORY)** — before writing any dashboard code:
    a. Fetch the full notebook to read the source SQL/Python for every dataframe
@@ -141,17 +141,26 @@ Fabi's built-in UI supports basic dashboarding (plotly/altair charts, input filt
 
 If the user asks for any of these, build a React app.
 
-### `fabi deploy` — Deploy React App to Fabi
+### `fabi app preview` — Upload a Smartbook Preview App
 
 ```bash
-fabi deploy ./dist                          # Deploy built app from dist/
-fabi deploy ./dist --entry-path index.html  # Specify entry file (default: index.html)
-fabi deploy ./dist --notebook-uuid <notebook_uuid> # Override the current Smartbook
+fabi app preview ./dist                          # Upload built app from dist/
+fabi app preview ./dist --entry-path index.html  # Specify entry file (default: index.html)
+fabi app preview ./dist --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
-Deploys a built React app to the current Fabi Smartbook. By default it uses the currently selected Smartbook workspace under `~/.fabi/notebooks/<notebook_uuid>`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
+Uploads a built React app as the current preview for the selected Fabi Smartbook. By default it uses the currently selected Smartbook workspace under `~/.fabi/notebooks/<notebook_uuid>`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
 
-**Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi build-app` → build the React app → `bun run build` → `fabi deploy ./dist`
+**Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi app build` → build the React app → `bun run build` → `fabi app preview ./dist`
+
+### `fabi app publish` — Publish App Preview to a Report
+
+```bash
+fabi app publish
+fabi app publish --notebook-uuid <notebook_uuid>
+```
+
+Publishes the current app preview from a Smartbook to a report. This is the report-facing publish step, not the Smartbook preview upload step.
 
 ### `fabi smartbook` — Select a Smartbook and local workspace
 
@@ -179,12 +188,12 @@ Fabi CLI keeps Smartbook-local files under:
 
 That directory is where you should expect:
 
-- `manifest.json` written by `fabi build-app`
+- `manifest.md` written by `fabi app build`
 - your local app source files directly in that Smartbook directory
 - your build output such as `dist/`
 - deployed app files downloaded by `fabi smartbook resume` into `dist/`
 
-Passing `--notebook-uuid` to `fabi build-app` or `fabi deploy` is a one-off override. It does not switch the current Smartbook workspace.
+Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook workspace.
 
 #### Finding the notebook UUID:
 
