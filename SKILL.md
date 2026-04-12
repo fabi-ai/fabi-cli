@@ -56,7 +56,17 @@ Without this context, you will make wrong assumptions. For example, "top albums"
 
 After running, read the output file with the Read tool (no bash/python needed).
 
-### `fabi chat` — Conversational Data Analysis
+### `fabi chat` — Conversational Data Analysis (Sub-Agent)
+
+`fabi chat` is a **sub-agent** backed by Fabi's AI — not a simple query tool. It has full access to connected data sources, can collect context from the notebook, dry-run code, and execute complex multi-step data queries and analysis autonomously. Think of it as a capable data analyst you can delegate to.
+
+**Delegate complex data work to `fabi chat`.** When you need to explore data, validate assumptions, run aggregations, join across tables, or prepare datasets for a dashboard, send the task to `fabi chat` rather than writing raw SQL yourself. The sub-agent understands the data semantics, can iterate on queries, and will return results you can build on. This is especially valuable for:
+
+- **Data exploration** — discovering what tables/columns exist and what they mean
+- **Complex queries** — multi-step aggregations, window functions, joins across sources
+- **Data validation** — verifying assumptions about data shape, nulls, cardinality
+- **Analysis preparation** — producing cleaned/aggregated dataframes that your React app can query directly. Prepared dataframes are **cached on the server**, so the dashboard queries them instead of re-running expensive raw SQL — this improves app performance significantly
+- **Statistical & ML tasks** — Fabi can run regressions, clustering, forecasting, and other statistical/ML workloads server-side, producing result dataframes your app can consume
 
 ```bash
 fabi smartbook new                         # Create a Smartbook first
