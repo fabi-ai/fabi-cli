@@ -68,6 +68,8 @@ After running, read the output file with the Read tool (no bash/python needed).
 - **Analysis preparation** — producing cleaned/aggregated dataframes that your React app can query directly. Prepared dataframes are **cached on the server**, so the dashboard queries them instead of re-running expensive raw SQL — this improves app performance significantly
 - **Statistical & ML tasks** — Fabi can run regressions, clustering, forecasting, and other statistical/ML workloads server-side, producing result dataframes your app can consume
 
+**Caveat: Use `fabi api` for schema/query validation, not `fabi chat`.** For quick tasks like validating SQL syntax or checking table schemas, call the notebook query API directly (`fabi api POST /api/v2/notebooks/<uuid>/query --data '{"sql":"..."}'`) — it is much faster than a full chat round-trip.
+
 ```bash
 fabi smartbook new                         # Create a Smartbook first
 fabi smartbook resume --notebook-uuid ... # Or resume an existing one
