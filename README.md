@@ -44,9 +44,11 @@ fabi chat "What tables do I have?"
 | `fabi api GET /api/v2/...` | Proxy a Fabi API request with the current CLI session |
 | `fabi logout` | Log out of Fabi |
 | `fabi smartbook list -n 10` | List recent Smartbooks |
-| `fabi smartbook current` | Show the current Smartbook and local workspace |
-| `fabi smartbook new --title "name"` | Create a new Smartbook and local workspace |
-| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app into `dist/` locally |
+| `fabi smartbook current` | Show the currently selected Smartbook |
+| `fabi smartbook new --title "name"` | Create a new Smartbook and select it |
+| `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook (downloads deployed app if workspace is set) |
+| `fabi workdir current` | Show the current local workspace path |
+| `fabi workdir set <path>` | Set the local workspace directory |
 | `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
 | `fabi app build` | Write the current Smartbook app manifest to the local workspace |
 | `fabi app preview ./dist` | Upload a built local app as the current Smartbook preview |
@@ -59,11 +61,12 @@ fabi chat "What tables do I have?"
 # Understand your data first
 fabi context -o fabi-context.md
 
-# Create or resume a Smartbook first
+# Create or resume a Smartbook, then set your workspace
 fabi smartbook new --title "Revenue Trends"
 fabi smartbook list
 fabi smartbook current
 fabi smartbook resume --notebook-uuid <notebook_uuid>
+fabi workdir set ./my-app
 
 # Data analysis
 fabi chat "What tables do I have?"
@@ -96,26 +99,21 @@ Config is stored at `~/.fabi/cli.json`.
 
 `fabi api` automatically injects the proper authorization header for authenticated Fabi API calls.
 
-Smartbook-local files live under:
+The Smartbook selection and local workspace are managed independently:
 
-```bash
-~/.fabi/notebooks/<notebook_uuid>
-```
+- `fabi smartbook new` / `fabi smartbook resume` select the current Smartbook
+- `fabi workdir set <path>` sets the local workspace directory
 
-Typical local files:
+Typical local files in the workspace:
 
 - `manifest.md` from `fabi app build`
-- your app source files directly in that Smartbook directory
+- your app source files
+- build output like `dist/`
 - downloaded deployed app files in `dist/` from `fabi smartbook resume`
 
-`fabi smartbook new` and `fabi smartbook resume` select the current Smartbook workspace. `fabi app build`, `fabi app preview`, and `fabi app publish` use that workspace by default.
+`fabi app build`, `fabi app preview`, and `fabi app publish` use the current workspace by default.
 
-Recommended convention:
-
-- keep your app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
-- keep build output like `dist/` there too
-
-Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook workspace.
+Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook.
 
 ## Uninstall
 

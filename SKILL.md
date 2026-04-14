@@ -161,9 +161,9 @@ fabi app preview ./dist --entry-path index.html  # Specify entry file (default: 
 fabi app preview ./dist --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
 
-Uploads a built React app as the current preview for the selected Fabi Smartbook. By default it uses the currently selected Smartbook workspace under `~/.fabi/notebooks/<notebook_uuid>`, but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
+Uploads a built React app as the current preview for the selected Fabi Smartbook. By default it uses the current workspace (set via `fabi workdir set`), but `--notebook-uuid` can target a different Smartbook explicitly. The app is bundled as a zip and uploaded.
 
-**Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi chat` → `fabi app build` → build the React app → `bun run build` → `fabi app preview ./dist`
+**Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi workdir set <path>` → `fabi chat` → `fabi app build` → build the React app → `bun run build` → `fabi app preview ./dist`
 
 ### `fabi app publish` — Publish App Preview to a Report
 
@@ -174,7 +174,7 @@ fabi app publish --notebook-uuid <notebook_uuid>
 
 Publishes the current app preview from a Smartbook to a report. This is the report-facing publish step, not the Smartbook preview upload step.
 
-### `fabi smartbook` — Select a Smartbook and local workspace
+### `fabi smartbook` — Select a Smartbook
 
 ```bash
 fabi smartbook list -n 10
@@ -185,31 +185,46 @@ fabi smartbook resume --notebook-uuid <notebook_uuid>
 
 This is the entrypoint for Smartbook-scoped work.
 
-- `fabi smartbook new` creates a new Smartbook and selects `~/.fabi/notebooks/<notebook_uuid>`
-- `fabi smartbook resume` switches to an existing Smartbook and downloads its deployed app into `dist/` inside that local workspace, overwriting existing files there
+- `fabi smartbook new` creates a new Smartbook and selects it as the current one
+- `fabi smartbook resume` switches to an existing Smartbook. If a local workspace is set (via `fabi workdir set`), downloads the deployed app into `dist/` there
 - `fabi smartbook list` shows recent Smartbooks and marks the current one
-- `fabi smartbook current` prints the currently selected Smartbook URL and local workspace path
+- `fabi smartbook current` prints the currently selected Smartbook UUID and URL
+
+**Note:** Smartbook commands do not change the local workspace. Use `fabi workdir set <path>` to manage the workspace directory separately.
+
+### `fabi workdir` — Manage the local workspace
+
+```bash
+fabi workdir current            # Show the current workspace path
+fabi workdir set <path>         # Set the workspace to a directory
+```
+
+The local workspace is where app source files, manifests, and build output live. It is managed independently from the selected Smartbook.
+
+Typical setup:
+
+```bash
+fabi smartbook resume --notebook-uuid <uuid>   # Select the Smartbook
+fabi workdir set ./my-app                       # Set the workspace
+fabi app build                                  # Writes manifest.md into the workspace
+```
 
 ### Local workspace model
 
-Fabi CLI keeps Smartbook-local files under:
-
-```bash
-~/.fabi/notebooks/<notebook_uuid>
-```
+The workspace path is stored in `~/.fabi/cli.json` under the `workdir` key. You set it explicitly with `fabi workdir set <path>`.
 
 That directory is where you should expect:
 
 - `manifest.md` written by `fabi app build`
-- your local app source files directly in that Smartbook directory
+- your local app source files
 - your build output such as `dist/`
 - deployed app files downloaded by `fabi smartbook resume` into `dist/`
 
-Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook workspace.
+Passing `--notebook-uuid` to `fabi app build`, `fabi app preview`, or `fabi app publish` is a one-off override. It does not switch the current Smartbook.
 
 #### Finding the notebook UUID:
 
 - From a Fabi URL: `https://app.fabi.ai/notebook/<notebook_uuid>`
-- From CLI config: `cat ~/.fabi/cli.json` and read the `workdir` value
-- From the local workspace path: `~/.fabi/notebooks/<notebook_uuid>`
+- From `fabi smartbook current`
+- From CLI config: `cat ~/.fabi/cli.json` and read the `notebook_uuid` value
 - Ask the user
