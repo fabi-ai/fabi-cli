@@ -31,7 +31,7 @@ curl -fsSL https://github.com/fabi-ai/fabi-cli/releases/latest/download/installe
 
 ```bash
 fabi login
-fabi smartbook new
+fabi smartbook new --title "Sales Analysis"
 fabi chat "What tables do I have?"
 ```
 
@@ -45,7 +45,7 @@ fabi chat "What tables do I have?"
 | `fabi logout` | Log out of Fabi |
 | `fabi smartbook list -n 10` | List recent Smartbooks |
 | `fabi smartbook current` | Show the current Smartbook and local workspace |
-| `fabi smartbook new` | Create a new Smartbook and local workspace |
+| `fabi smartbook new --title "name"` | Create a new Smartbook and local workspace |
 | `fabi smartbook resume --notebook-uuid <uuid>` | Switch to a Smartbook and download its deployed app into `dist/` locally |
 | `fabi chat "prompt"` | Conversational data analysis in the current Smartbook |
 | `fabi app build` | Write the current Smartbook app manifest to the local workspace |
@@ -60,7 +60,7 @@ fabi chat "What tables do I have?"
 fabi context -o fabi-context.md
 
 # Create or resume a Smartbook first
-fabi smartbook new
+fabi smartbook new --title "Revenue Trends"
 fabi smartbook list
 fabi smartbook current
 fabi smartbook resume --notebook-uuid <notebook_uuid>
