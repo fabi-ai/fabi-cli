@@ -99,7 +99,7 @@ Use this when you need to call Fabi backend APIs directly from the terminal. The
 ### `fabi app build` — Build a React Dashboard
 
 ```bash
-fabi app build                                 # Write manifest to ~/.fabi/notebooks/<uuid>/manifest.md
+fabi app build                                 # Write manifest.md into the current workspace
 fabi app build -o manifest.json                # Save to a custom file
 fabi app build --notebook-uuid <notebook_uuid> # Override the current Smartbook
 ```
@@ -120,7 +120,7 @@ Fetches the notebook manifest as a Markdown document describing available data (
 
 Use the Smartbook workspace as the app project directory:
 
-- put app source files directly under `~/.fabi/notebooks/<notebook_uuid>/`
+- put app source files in the current workspace set via `fabi workdir set <path>`
 - keep `dist/` there too when you build
 
 #### Pre-build checklist (must complete before writing App.tsx):
