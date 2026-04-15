@@ -78,7 +78,7 @@ fabi logout
 
 # Build and preview a dashboard
 fabi app build
-# ... create your app files directly under ~/.fabi/notebooks/<notebook_uuid>/ ...
+# ... create your app files in the current workspace (for example `./my-app`) ...
 bun run build
 fabi app preview ./dist
 
