@@ -142,6 +142,19 @@ Use the Smartbook workspace as the app project directory:
 - **Subpath-safe assets** — deployed notebook apps are hosted under `/notebook/<uuid>/deployed-app/`, not the site root. Configure the frontend build to emit relative asset URLs (for Vite, set `base: "./"`) so generated bundles use `./assets/...` instead of `/assets/...`, which will 404 after deployment.
 - **SQL for data access** — `POST /api/v2/notebooks/{uuid}/query` with `{"sql": "SELECT * FROM dataframe_name"}`. Reference artifact names as table names.
 
+#### BI best practices (apply to every dashboard)
+
+Treat these as defaults. Deviate only when the user explicitly asks for something different.
+
+- **Executive summary at the top** — open the dashboard with a short TL;DR that names the headline number(s) and one or two insights a busy stakeholder needs. Skip only if the user explicitly says "no summary".
+- **Period comparisons on every KPI** — bare numbers are not useful. Show WoW, MoM, or YoY deltas (absolute and %) next to each KPI tile. Pick the cadence that matches the metric's natural frequency (daily active users → WoW; revenue → MoM or YoY).
+- **Top-N + "Other" for long-tail dimensions** — when charting a high-cardinality dimension (customers, SKUs, regions), show the top N (typically 5–10) and roll the remainder into an "Other" bucket. Never render a 200-bar chart.
+- **Layout: summary → detail, top-left first** — KPI tiles across the top, most important chart in the top-left (that's where eyes land first), supporting charts flowing left-to-right and top-to-bottom, drill-down detail at the bottom.
+- **Tabs for large dashboards** — if the dashboard spans multiple logical categories (e.g. Revenue / Customers / Operations), split them into tabs rather than one long scroll. One tab = one decision-making context.
+- **Data freshness indicator** — every dashboard displays a "Last updated: <timestamp>" in the header or footer. Pull it from query metadata or `MAX(updated_at)` in the source data.
+- **SQL transparency (hover-to-inspect)** — every chart, table, and KPI tile exposes its underlying SQL in a modal, triggered on hover or via an info icon. Analysts must be able to audit definitions; black-box dashboards get distrusted and discarded. Pass the SQL string alongside the component's data and render it in a modal on user action.
+- **Light / dark / system theme** — include a theme toggle with three options (light, dark, follow browser/OS) and persist the choice in `localStorage`. Default to `system`. Use CSS variables or a theme context so charts, tables, and KPIs all respond to the active theme.
+
 #### When to build a React app vs use Fabi Chat
 
 Fabi's built-in UI supports basic dashboarding (plotly/altair charts, input filters, client-side pagination). But the following features require a custom React app — do NOT try to implement these via `fabi chat`:
