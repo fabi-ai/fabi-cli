@@ -10,7 +10,10 @@ description: |
   from a Smartbook, and `fabi app publish` for publishing them to reports.
   Use when asked to "fabi login", "fabi context", "fabi chat", "build a dashboard",
   "build a react app from fabi", "fabi app build", "fabi app preview", "deploy", or
-  "create a dashboard from this notebook".
+  "create a dashboard from this notebook". When building any dashboard, consult the
+  "BI best practices" section of this skill for required defaults (executive summary,
+  period comparisons on KPIs, Top-N + Other, layout, tabs, data freshness, SQL
+  transparency modals, and light/dark/system theme).
 allowed-tools:
   - Bash
   - Read
