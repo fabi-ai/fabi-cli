@@ -181,6 +181,13 @@ Uploads a built React app as the current preview for the selected Fabi Smartbook
 
 **Full workflow:** `fabi context` (understand data) → `fabi smartbook new` or `fabi smartbook resume` → `fabi workdir set <path>` → `fabi chat` → `fabi app build` → build the React app → `bun run build` → `fabi app preview ./dist`
 
+**After uploading, surface the right URL to the user:**
+
+- **Default (view / debug):** `https://app.fabi.ai/notebook/<notebook_uuid>/deployed-app/` — raw standalone React app, no iframe, no theme-conflict noise. Use this when showing the user their uploaded app or verifying the deployment.
+- **For sharing:** `https://app.fabi.ai/notebook/<notebook_uuid>?view=app` — embeds the app in the notebook view and carries Fabi's share/access controls. Use this only when the user explicitly wants to share the app with someone else ("share", "send a link", "give access to").
+
+Always resolve `<notebook_uuid>` from the current Smartbook and print the full URL.
+
 ### `fabi app publish` — Publish App Preview to a Report
 
 ```bash
