@@ -54,6 +54,7 @@ fabi chat "What tables do I have?"
 | `fabi app preview ./dist` | Upload a built local app as the current Smartbook preview |
 | `fabi app publish` | Publish the current app preview as a report |
 | `fabi install-skill` | Install the /fabi skill for Claude Code and Codex |
+| `fabi --version` (or `-V`) | Print the installed CLI version |
 
 ## Examples
 
